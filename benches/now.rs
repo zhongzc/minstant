@@ -1,8 +1,9 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use minstant::instant::Instant;
 
 fn bench_now(c: &mut Criterion) {
     c.bench_function("now", |b| {
-        b.iter(minstant::now);
+        b.iter(minstant::instant::Instant::now);
     });
 }
 
@@ -13,10 +14,10 @@ fn bench_std_now(c: &mut Criterion) {
 }
 
 fn bench_unix_time(c: &mut Criterion) {
-    let anchor = minstant::Anchor::new();
+    let start = Instant::now();
     c.bench_function("unix_time", |b| {
         b.iter(|| {
-            black_box(anchor.cycle_to_unix_nanos(minstant::now()));
+            black_box(start.elapsed());
         });
     });
 }
